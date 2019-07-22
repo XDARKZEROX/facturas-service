@@ -7,25 +7,30 @@ class Factura_model extends CI_Model {
     }
 
     public function obtenerFacturasDelDia() {
-        $this->db->select('f.*,c.*,u.firstname,u.lastname');
-        $this->db->from('facturas f');
+        $this->db->select('f.*,c.*,u.firstname,u.lastname, fa.estado');
+        $this->db->from('facturacion fa');
+        $this->db->join('facturas f', 'f.id_factura = fa.id_factura');
         $this->db->join('clientes c', 'f.id_cliente = c.id_cliente');
         $this->db->join('users u', 'f.id_vendedor = u.user_id');
-        //$this->db->where("DATE(fecha_factura) = CURDATE()");
+        $this->db->where('DAY(f.fecha_factura) = DAY(NOW())');
+        $this->db->where('fa.estado',1);
+        $this->db->group_by("f.id_cliente");
         $query = $this->db->get();
         return $query->result_array();
     }
 
     public function obtenerDetalleFacturaPorId($idFactura) {
-        $this->db->select('d.id_detalle, d.id_producto, d.cantidad, d.numero_factura, d.precio_venta, p.nombre_producto');
-        $this->db->from('detalle_factura d');
-        $this->db->join('products p', 'd.id_producto = p.id_producto');
-        $this->db->where('d.numero_factura', $idFactura);
+        $this->db->select('detalle_factura.* , products.nombre_producto');
+        $this->db->from('products, detalle_factura, facturas');
+        $this->db->where('products.id_producto = detalle_factura.id_producto');
+        $this->db->where('detalle_factura.numero_factura = facturas.numero_factura');
+        $this->db->where('facturas.id_factura', $idFactura);
+        //$sql = $this->db->get_compiled_select();
         $query = $this->db->get();
         return $query->result_array();
     }
 
-    public function insertarNuevaFactura($factura){
+    public function insertarFactura($factura){
         $date=date("Y-m-d H:i:s");
         $time_input = strtotime(date($factura['fecha_vencimiento']));
         $day = date('d', $time_input);
@@ -55,7 +60,7 @@ class Factura_model extends CI_Model {
         return $query->row();
     }
 
-    public function crearFacturaDetalle(){
+    public function insertarDetalleFactura(){
 
     }
 

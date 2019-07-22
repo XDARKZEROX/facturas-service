@@ -18,8 +18,8 @@ class Facturas extends REST_Controller {
             $facturas[$i]['detalle_factura'] = $detalle_producto;
         }
 
-        $this->generarNuevaFactura($facturas);
-        //$this->response($facturas);
+        //$this->generarFacturas($facturas);
+        $this->response($facturas);
     }
 
     public function index_post() {
@@ -34,12 +34,14 @@ class Facturas extends REST_Controller {
         //Here make an auth token validation 
         //testing the auth Token:
         //$this->response($this->input->get_request_header('Authorization'));
-        $this->response($facturas);
+        $this->generarFacturas($facturas);
+        //$this->response($facturas);
     }
 
-    private function generarNuevaFactura($facturas){
+    private function generarFacturas($facturas){
         foreach($facturas as $factura) {
-            $this->factura_model->insertarNuevaFactura($factura);
+            $this->factura_model->insertarFactura($factura);
+            $this->factura_model->insertarDetalleFactura($factura);
         }
     }
 

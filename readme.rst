@@ -1,59 +1,41 @@
-###################
-What is CodeIgniter
-###################
+######################################
+Servicio de Facturación Electronica
+######################################
 
-CodeIgniter is an Application Development Framework - a toolkit - for people
-who build web sites using PHP. Its goal is to enable you to develop projects
-much faster than you could if you were writing code from scratch, by providing
-a rich set of libraries for commonly needed tasks, as well as a simple
-interface and logical structure to access these libraries. CodeIgniter lets
-you creatively focus on your project by minimizing the amount of code needed
-for a given task.
-
-*******************
-Release Information
-*******************
-
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<https://codeigniter.com/download>`_ page.
-
-**************************
-Changelog and New Features
-**************************
-
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
-
-*******************
-Server Requirements
-*******************
-
-PHP version 5.6 or newer is recommended.
-
-It should work on 5.3.7 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
-
-************
-Installation
-************
-
-Please see the `installation section <https://codeigniter.com/user_guide/installation/index.html>`_
-of the CodeIgniter User Guide.
-
-*******
-License
-*******
-
-Please see the `license
-agreement <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/license.rst>`_.
+Servicio web de facturacion que obtiene el listado de facturas que pertenezcan
+al dia actual y en caso de ser el mismo, enviara un correo creando una nueva factura.
 
 *********
-Database
+Version
 *********
+1.0.0
+
+
+**************
+Observaciones
+**************
 
 A partir de Mysql 8.0 el metodo de autenticación para mysqli mostrara un mensaje de error, esto se puede corregir ejecutando la siguiente sentencia sql para el usuario con el que se accede a la base de datos:
 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysql';
 
+El sistema por el momento esta pensando en una relacion de emision de facturas de 1 a 1
+Esto quiere decir que si se necesitase enviar mas de un correo de facturación perdiodicamente la solución es que se registren 2 clientes diferentes.
+
+Otra observacion es que se necesita agregar una tabla de estados a la facturacion que pueda determinar si dicho cliente
+debe seguir recibiendo correos de forma masiva
+
+****************
+Futuras mejoras
+****************
+Implementar un panel de facturacion que permita personalizar más el la logica de facturacion.
+Por ejemplo el poder determinar si la factura a emitir sera 
+- Mensual
+- Anual
+- Bimestral, Trimestral, etc.
+
+CREATE TABLE IF NOT EXISTS `facturacion` (
+   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   `estado` char(1) NOT NULL,
+   `id_factura` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
