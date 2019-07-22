@@ -48,6 +48,7 @@ class Factura_model extends CI_Model {
         );
 
         $this->db->insert('facturas', $data);
+        return $last->last+1;
         //$sql = $this->db->set($data)->get_compiled_insert('facturas');
     }
 
@@ -60,8 +61,16 @@ class Factura_model extends CI_Model {
         return $query->row();
     }
 
-    public function insertarDetalleFactura(){
+    public function insertarDetalleFactura($detalle, $numero_factura){
+        $data = array(
+            'id_detalle' => NULL,
+            'numero_factura' => $numero_factura,
+            'id_producto' => $detalle['id_producto'],
+            'cantidad' => $detalle['cantidad'],
+            'precio_venta' => $detalle['precio_venta'],
+        );
 
+        $this->db->insert('detalle_factura', $data);
     }
 
 

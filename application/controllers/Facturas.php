@@ -15,7 +15,7 @@ class Facturas extends REST_Controller {
         $facturas = $this->factura_model->obtenerFacturasDelDia();
         for($i =0;$i<count($facturas);$i++){
             $detalle_producto = $this->factura_model->obtenerDetalleFacturaPorId($facturas[$i]['id_factura']);
-            $facturas[$i]['detalle_factura'] = $detalle_producto;
+            $facturas[$i]['detalle'] = $detalle_producto;
         }
 
         //$this->generarFacturas($facturas);
@@ -27,7 +27,7 @@ class Facturas extends REST_Controller {
         $facturas = $this->factura_model->obtenerFacturasDelDia();
         for($i =0;$i<count($facturas);$i++){
             $detalle_producto = $this->factura_model->obtenerDetalleFacturaPorId($facturas[$i]['id_factura']);
-            $facturas[$i]['detalle_factura'] = $detalle_producto;
+            $facturas[$i]['detalle'] = $detalle_producto;
         }
 
         //Recorrer cada factura y agregarle el detalle dentro
@@ -35,13 +35,15 @@ class Facturas extends REST_Controller {
         //testing the auth Token:
         //$this->response($this->input->get_request_header('Authorization'));
         $this->generarFacturas($facturas);
-        //$this->response($facturas);
+        $this->response("complete");
     }
 
     private function generarFacturas($facturas){
         foreach($facturas as $factura) {
-            $this->factura_model->insertarFactura($factura);
-            $this->factura_model->insertarDetalleFactura($factura);
+            $numero_factura = $this->factura_model->insertarFactura($factura);
+            foreach($factura['detalle'] as $detalle){
+                $this->factura_model->insertarDetalleFactura($detalle, $numero_factura);
+            }
         }
     }
 
