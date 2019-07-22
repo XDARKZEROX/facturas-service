@@ -11,17 +11,15 @@ class Facturas extends REST_Controller {
 
     public function index_get() {
 
+        //1
         $facturas = $this->factura_model->obtenerFacturasDelDia();
         for($i =0;$i<count($facturas);$i++){
             $detalle_producto = $this->factura_model->obtenerDetalleFacturaPorId($facturas[$i]['id_factura']);
             $facturas[$i]['detalle_factura'] = $detalle_producto;
         }
 
-        //Recorrer cada factura y agregarle el detalle dentro
-        //Here make an auth token validation 
-        //testing the auth Token:
-        //$this->response($this->input->get_request_header('Authorization'));
-        $this->response($facturas);
+        $this->generarNuevaFactura($facturas);
+        //$this->response($facturas);
     }
 
     public function index_post() {
@@ -38,4 +36,11 @@ class Facturas extends REST_Controller {
         //$this->response($this->input->get_request_header('Authorization'));
         $this->response($facturas);
     }
+
+    private function generarNuevaFactura($facturas){
+        foreach($facturas as $factura) {
+            $this->factura_model->insertarNuevaFactura($factura);
+        }
+    }
+
 }

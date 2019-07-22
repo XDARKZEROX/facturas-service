@@ -24,4 +24,40 @@ class Factura_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function insertarNuevaFactura($factura){
+        $date=date("Y-m-d H:i:s");
+        $time_input = strtotime(date($factura['fecha_vencimiento']));
+        $day = date('d', $time_input);
+        $last = $this->obtenerUltimoNumeroDeFacturaGenerada();
+        $data = array(
+            'id_factura' => NULL,
+            'numero_factura' => $last->last+1,
+            'fecha_factura' => date("Y-m-d H:i:s"),
+            'id_cliente' => $factura['id_cliente'],
+            'id_vendedor' => $factura['id_vendedor'],
+            'condiciones' => $factura['condiciones'],
+            'total_venta' => $factura['total_venta'],
+            'estado_factura' => $factura['estado_factura'],
+            'fecha_vencimiento' => date('Y-m-'.$day.' H:i:s',$time_input)
+        );
+
+        $this->db->insert('facturas', $data);
+        //$sql = $this->db->set($data)->get_compiled_insert('facturas');
+    }
+
+    public function obtenerUltimoNumeroDeFacturaGenerada(){
+        $this->db->select('LAST_INSERT_ID(numero_factura) as last');
+        $this->db->from('facturas');
+        $this->db->order_by('id_factura','DESC');
+        $this->db->limit(1,0);
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function crearFacturaDetalle(){
+
+    }
+
+
 }
