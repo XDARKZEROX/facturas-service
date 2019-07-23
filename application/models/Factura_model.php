@@ -69,9 +69,6 @@ class Factura_model extends CI_Model {
             'cantidad' => $detalle['cantidad'],
             'precio_venta' => $detalle['precio_venta'],
         );
-
         $this->db->insert('detalle_factura', $data);
     }
-
-
 }
