@@ -8,7 +8,7 @@ class Pdfgenerator {
 
   public function generate($html, $filename='', $stream=TRUE, $paper = 'P', $orientation = "Letter")
   {
-    $dompdf = new DOMPDF();
+    $dompdf = new DOMPDF(array('enable_remote' => true, 'isHtml5ParserEnabled' => true));
     $dompdf->loadHtml($html);
     $dompdf->setPaper($paper, $orientation);
     $dompdf->render();

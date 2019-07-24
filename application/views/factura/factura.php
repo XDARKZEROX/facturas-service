@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <header>
 <style type="text/css">
@@ -42,27 +41,41 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 </header>
 <body>  
     <page backtop="15mm" backbottom="15mm" backleft="15mm" backright="15mm" style="font-size: 12pt; font-family: arial" >
-           
         <table cellspacing="0" style="width: 100%;">
             <tr>
-    
                 <td style="width: 25%; color: #444444;">
+                    <img style="height: 50px;" src="https://clicdominio.com/facturas/img/1478792451_google30.png" alt="Logo">  
                 </td>
-                
+                <td style="width: 50%; color: #34495e;font-size:12px;text-align:center">
+                    <span style="color: #34495e;font-size:14px;font-weight:bold"><?php echo $perfil->nombre_empresa;?></span>
+                    <br><?php echo $perfil->direccion.', '.$perfil->ciudad.' '.$perfil->estado;?><br> 
+                    Teléfono: <?php echo $perfil->telefono;?><br>
+                    Email: <?php echo $perfil->email;?>
+                </td>
                 <td style="width: 25%;text-align:right">
-                FACTURA Nº
+                    FACTURA Nº <?php echo 'FAC'.$factura['numero_factura'];?>
                 </td>
                 
             </tr>
-        </table>
+        </table>    
         <br>
-        
         <table cellspacing="0" style="width: 100%; text-align: left; font-size: 11pt;">
             <tr>
                <td style="width:50%;" class='midnight-blue'>FACTURAR A</td>
             </tr>
             <tr>
-               <td style="width:50%;" >
+               <td style="width:50%;">
+               <?php 
+				echo $factura['nombre_cliente'];
+                echo "<br>";
+                echo $factura['direccion_cliente'];
+                echo "<br><br> <b>CIF/NIF:</b>";
+                echo $factura['identificacion_fiscal'];
+                echo "<br> <b>Teléfono:</b>";
+                echo $factura['telefono_cliente'];
+                echo "<br> <b>Email:</b>";
+                echo $factura['email_cliente'];
+			    ?>
                </td>
             </tr>
         </table>
@@ -75,11 +88,19 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
                <td style="width:40%;" class='midnight-blue'>FORMA DE PAGO</td>
             </tr>
             <tr>
-               <td style="width:35%;">
+                <td style="width:35%;">
+                    <?php echo $factura['firstname']." ".$factura['lastname'];?>
                 </td>
-              <td style="width:25%;"></td>
-               <td style="width:40%;" >
-               </td>
+                <td style="width:25%;"><?php echo date("d/m/Y");?></td>
+                <td style="width:40%;" >
+                <?php 
+				if ($factura['condiciones']==1){echo "Efectivo";}
+				elseif ($factura['condiciones']==2){echo "Transferencia bancaria";}
+				elseif ($factura['condiciones']==3){echo "Tarjeta de Crédito/Débito";}
+				elseif ($factura['condiciones']==4){echo "Paypal";}
+                elseif ($factura['condiciones']==5){echo "Domiciliación Bancaria";}
+				?>
+                </td>
             </tr>
             
         </table>

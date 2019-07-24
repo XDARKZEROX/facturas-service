@@ -7,6 +7,7 @@ class Facturas extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('factura_model');
+        $this->load->model('perfil_model');
         $this->load->library('pdfgenerator');
         $this->load->config('email');
         $this->load->library('email');
@@ -19,23 +20,28 @@ class Facturas extends REST_Controller {
             $facturas[$i]['detalle'] = $detalle_producto;
         }
 
-        //$this->generarFacturas($facturas);
-        //$this->response($facturas);
-        $html = $this->load->view('factura/factura',[],true);
-        $filename = 'reporte.pdf';
-        $output = $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait');
-        file_put_contents($filename, $output);
-        $this->email->set_newline("\r\n");
-        $this->email->from("Alexander");
-        $this->email->to("aguzman@northsouthstudios.com");
-        $this->email->subject("factura");
-        $this->email->message("test");
-        $this->email->attach($filename);
-        if ($this->email->send()) {
-            echo 'Your Email has successfully been sent.';
+        if(!empty($facturas)){
+            $data['factura'] = $facturas[0];
+            $data['perfil'] = $this->perfil_model->obtenerPerfil();
+
+            //$this->generarFacturas($facturas);
+            
+            $html = $this->load->view('factura/factura', $data, true);
+            $filename = 'reporte.pdf';
+            $this->pdfgenerator->generate($html, $filename, true, 'A4', 'portrait');
+            file_put_contents($filename, $output);
+            $this->email->set_newline("\r\n");
+            $this->email->from("Alexander");
+            $this->email->to("aguzman@northsouthstudios.com");
+            $this->email->subject("factura");
+            $this->email->message("test");
+            $this->email->attach($filename);
+        //if ($this->email->send()) {
+         //  echo 'Your Email has successfully been sent.';
+        //} else {
+        //    show_error($this->email->print_debugger());
+        //}
             unlink($filename);
-        } else {
-            show_error($this->email->print_debugger());
         }
     }
 
