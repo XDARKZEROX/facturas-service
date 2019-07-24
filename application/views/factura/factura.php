@@ -77,6 +77,13 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
                 echo $factura['email_cliente'];
 			    ?>
                </td>
+               <td style="width:50%;text-align: center"><h1>
+                <?php
+                if ($factura['estado_factura']==1){echo "<h1 style='color: #5cb85c'>PAGADA</h1>";}
+                elseif ($factura['estado_factura']==2){echo "<h1 style='color: #f0ad4e'>PENDIENTE</h1>";}
+                ?>
+                </h1>
+                </td>
             </tr>
         </table>
         
@@ -115,23 +122,45 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
                 
             </tr>
     
+
+            <?php 
+            $nums = 1;
+            $sumador_total=0;
+            foreach($factura['detalle'] as $detalle){ 
+            if ($nums%2==0){
+		        $clase="clouds";
+	        } else {
+		        $clase="silver";
+	        }
+
+            $precio_total= number_format($detalle['precio_venta']*$detalle['cantidad'],2);   
+            $precio_total_r=str_replace(",","",$precio_total);
+	        $sumador_total+=$precio_total_r;//Sumador
+            ?>
             <tr>
-                <td class='' style="width: 10%; text-align: center"></td>
-                <td class='' style="width: 60%; text-align: left"></td>
-                <td class='' style="width: 15%; text-align: right"></td>
-                <td class='' style="width: 15%; text-align: right"></td>      
+                <td class='<?php echo $clase;?>' style="width: 10%; text-align: center"><?php echo $detalle['cantidad']; ?></td>
+                <td class='<?php echo $clase;?>' style="width: 60%; text-align: left"><?php echo $detalle['nombre_producto']; ?></td>
+                <td class='<?php echo $clase;?>' style="width: 15%; text-align: right"><?php echo $detalle['precio_venta']; ?></td>
+                <td class='<?php echo $clase;?>' style="width: 15%; text-align: right"><?php echo $precio_total; ?></td>      
             </tr>
-    
+            <?php 
+            $nums++;
+            } 
+            $subtotal=number_format($sumador_total,2,'.','');
+            $total_iva=($subtotal * $perfil->impuesto )/100;
+	        $total_iva=number_format($total_iva,2,'.','');
+            ?>
+
             <tr>
-                <td colspan="3" style="widtd: 85%; text-align: right;">SUBTOTAL</td>
-                <td style="widtd: 15%; text-align: right;"></td>
+                <td colspan="3" style="widtd: 85%; text-align: right;">SUBTOTAL <?php echo $perfil->moneda;?></td>
+                <td style="widtd: 15%; text-align: right;"><?php echo number_format($subtotal,2);?></td>
             </tr>
             <tr>
-                <td colspan="3" style="widtd: 85%; text-align: right;"></td>
-                <td style="widtd: 15%; text-align: right;"></td>
+                <td colspan="3" style="widtd: 85%; text-align: right;">IVA (<?php echo $perfil->impuesto; ?>)% <?php echo $perfil->moneda;?> </td>
+                <td style="widtd: 15%; text-align: right;"><?php echo number_format($total_iva,2);?></td>
             </tr><tr>
-                <td colspan="3" style="widtd: 85%; text-align: right;"></td>
-                <td style="widtd: 15%; text-align: right;"></td>
+                <td colspan="3" style="widtd: 85%; text-align: right;">TOTAL <?php echo $perfil->moneda;?></td>
+                <td style="widtd: 15%; text-align: right;"><?php echo $factura['total_venta'];?></td>
             </tr>
         </table>
         
