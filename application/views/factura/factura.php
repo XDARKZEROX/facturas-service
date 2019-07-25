@@ -90,16 +90,17 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
            <br>
             <table cellspacing="0" style="width: 100%; text-align: left; font-size: 11pt;">
             <tr>
-               <td style="width:35%;" class='midnight-blue'>VENDEDOR</td>
-              <td style="width:25%;" class='midnight-blue'>FECHA</td>
-               <td style="width:40%;" class='midnight-blue'>FORMA DE PAGO</td>
+            <td style="width:40%;" class='midnight-blue'>VENDEDOR</td>
+            <td style="width:20%;" class='midnight-blue'>FECHA</td>
+		   <td style="width:20%;" class='midnight-blue'>FORMA DE PAGO</td>
+            <td style="width:20%;" class='midnight-blue'>FECHA VENCIMIENTO</td>
             </tr>
             <tr>
-                <td style="width:35%;">
+                <td style="width:40%;">
                     <?php echo $factura['firstname']." ".$factura['lastname'];?>
                 </td>
-                <td style="width:25%;"><?php echo date("d/m/Y");?></td>
-                <td style="width:40%;" >
+                <td style="width:20%;"><?php echo date("d/m/Y");?></td>
+                <td style="width:20%;" >
                 <?php 
 				if ($factura['condiciones']==1){echo "Efectivo";}
 				elseif ($factura['condiciones']==2){echo "Transferencia bancaria";}
@@ -108,6 +109,7 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
                 elseif ($factura['condiciones']==5){echo "Domiciliación Bancaria";}
 				?>
                 </td>
+                <td style="width:20%;" ><?php echo date("d/m/Y", strtotime($factura['fecha_vencimiento']));?></td>
             </tr>
             
         </table>
@@ -140,7 +142,7 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
             <tr>
                 <td class='<?php echo $clase;?>' style="width: 10%; text-align: center"><?php echo $detalle['cantidad']; ?></td>
                 <td class='<?php echo $clase;?>' style="width: 60%; text-align: left"><?php echo $detalle['nombre_producto']; ?></td>
-                <td class='<?php echo $clase;?>' style="width: 15%; text-align: right"><?php echo $detalle['precio_venta']; ?></td>
+                <td class='<?php echo $clase;?>' style="width: 15%; text-align: right"><?php echo number_format($detalle['precio_venta'],2); ?></td>
                 <td class='<?php echo $clase;?>' style="width: 15%; text-align: right"><?php echo $precio_total; ?></td>      
             </tr>
             <?php 

@@ -6,7 +6,7 @@ use Dompdf\Dompdf;
 
 class Pdfgenerator {
 
-  public function generate($html, $filename='', $stream=TRUE, $paper = 'P', $orientation = "Letter")
+  public function generate($html, $filename='', $stream=TRUE, $paper = 'letter', $orientation = "landscape")
   {
     $dompdf = new DOMPDF(array('enable_remote' => true, 'isHtml5ParserEnabled' => true));
     $dompdf->loadHtml($html);
